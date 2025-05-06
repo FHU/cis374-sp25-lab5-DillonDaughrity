@@ -102,6 +102,15 @@ namespace Lab5
             {
                 int numConnectedComponents = 0;
 
+                foreach (var node in Nodes)
+                {
+                    if (node.Color == Color.White)
+                    {
+                        DFS(node, false);
+                        numConnectedComponents++;
+                    }
+                }
+
                 // choose a random vertex
                 // do a DFS from that vertex
                 // increment the CC count

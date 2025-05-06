@@ -102,13 +102,14 @@ public class UndirectedWeightedGraph
         {
             int numConnectedComponents = 0;
 
-            // choose a random vertex
-            // do a DFS from that vertex
-            // increment the CC count
-            // choose a random vertex that is white (unvisited)
-            // do a DFS from that vertex
-            // increment the CC count
-            // choose a random vertex that is white (unvisited)
+            foreach (var node in Nodes)
+                {
+                    if (node.Color == Color.White)
+                    {
+                        DFS(node, false);
+                        numConnectedComponents++;
+                    }
+                }
 
             return numConnectedComponents;
         }
@@ -194,8 +195,8 @@ public class UndirectedWeightedGraph
 
         // initialize all colors to white
 
-        var node1 = FindNode(node1name);
-        var node2 = FindNode(node2name);
+        var node1 = GetNodeByName(node1name);
+        var node2 = GetNodeByName(node2name);
 
         // 2. Do all the path finding computation/generation
         DFSVisit(node1, node2, pred);
