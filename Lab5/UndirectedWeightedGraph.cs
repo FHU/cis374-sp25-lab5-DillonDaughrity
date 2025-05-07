@@ -177,29 +177,14 @@ public class UndirectedWeightedGraph
         // 1. initilize all the things 
         pathList = new List<Node>();
 
-        // pred[] => node name to its predecessor node
-        Dictionary<string, Node> pred = new Dictionary<string, Node>();
-        // add every node name to the dictionary with a null pred.
-        foreach (var node in Nodes)
-        {
-            pred[node.Name] = null;
-        }
-
-        // dist[] => node name to distance from the source node
-        Dictionary<string, int> dist = new Dictionary<string, int>();
-        // setup all distances to infinity
-        foreach (var node in Nodes)
-        {
-            dist[node.Name] = int.MaxValue;
-        }
-
         // initialize all colors to white
 
         var node1 = GetNodeByName(node1name);
         var node2 = GetNodeByName(node2name);
 
         // 2. Do all the path finding computation/generation
-        DFSVisit(node1, node2, pred);
+
+        
 
         // 3. Post-process the data structures and convert them to the right format.
 
@@ -324,12 +309,12 @@ public class UndirectedWeightedGraph
 
     public Dictionary<Node, (Node pred, int cost)> Dijkstra(Node startingNode)
     {
-        // PriorityQueue<Neighbor, int> priorityQueue = new PriorityQueue<Neighbor, int>();
-        // var neightbor = new Neighbor(){ Node= new Node(), Weight= 4};
+        PriorityQueue<Neighbor, int> priorityQueue = new PriorityQueue<Neighbor, int>();
+        var neightbor = new Neighbor(){ Node= new Node(), Weight= 4};
 
-        // priorityQueue.Enqueue( neightbor, neightbor.Weight + currentCost);
+        priorityQueue.Enqueue( neightbor, neightbor.Weight + 0);
 
-        // HashSet<Node> visited = new HashSet<Node>();    
+        HashSet<Node> visited = new HashSet<Node>();    
 
 
         return null;
