@@ -179,7 +179,7 @@ namespace Lab5
             // sort the neighbors so that we visit them in alpha order
             node.Neighbors.Sort();
 
-            // visit every neighbor 
+            // visit every neighbor
             foreach (var neighbor in node.Neighbors)
             {
                 if (neighbor.Node.Color == Color.White)

@@ -9,9 +9,8 @@ class Program
         
         List<Node> list = new List<Node>();
 
-        unweighted_graph.BFS(unweighted_graph.Nodes[0]);
-
-        // weighted_graph.DFSPathBetween("a", "b", out list);
+        //unweighted_graph.DFS(unweighted_graph.Nodes[0]);
+        weighted_graph.DFS(weighted_graph.Nodes[0]);
     }
 }
 
