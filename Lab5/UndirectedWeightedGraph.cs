@@ -174,42 +174,38 @@ public class UndirectedWeightedGraph
     /// <returns>The total cost of the weights in the path</returns>
     public int DFSPathBetween(string node1name, string node2name, out List<Node> pathList)
     {
-        // 1. initilize all the things 
-        pathList = new List<Node>();
+        var nodes = DFS(GetNodeByName(node1name));
 
-        // initialize all colors to white
+        pathList = new List<Node>();
+        int cost = 0;
 
         var node1 = GetNodeByName(node1name);
         var node2 = GetNodeByName(node2name);
+        pathList.Add(node2);
 
-        // 2. Do all the path finding computation/generation
-
+        foreach (Neighbor n in node2.Neighbors)
+        {
+            if (n.Node == nodes[node2]) {cost += n.Weight;}
+        }
         
+        var node = nodes[node2];
 
-        // 3. Post-process the data structures and convert them to the right format.
+        while (node != node1)
+        {
+            pathList.Insert(0, node);
 
-        /*
-            * PRED 
-            * a -> c
-            * c -> d
-            * d -> s 
-            *
-            *  s -> t 
-            */
+            foreach (Neighbor n in node.Neighbors)
+            {
+                if (n.Node == nodes[node]) {cost += n.Weight;}
+            }
 
-        // pathList = s, d, c, a
-        //int cost = 0;
-        //currentNode = endNode
-        //for ...
-        //    pathList.Add(currentNode)
-        //    predNode = pred[currentNode]
-        //    weight = predNode.neighbors[currentNode].weight
-        //    cost += weight
-        //    currentNode = predNode
+            node = nodes[node];
+            
+        }
+        
+        pathList.Insert(0, node);
 
-        //return cost;
-
-        return 0;
+        return cost;
     }
 
     private void DFSVisit(Node node, Dictionary<Node, Node> pred)
@@ -298,12 +294,40 @@ public class UndirectedWeightedGraph
     /// <param name="node2name">The ending node's name</param>
     /// <param name="pathList">A list of the nodes in the path from the starting node to the ending node</param>
     /// <returns>The total cost of the weights in the path</returns>
-    public int BFSPathBetween(string node1, string node2, out List<Node> pathList)
+    public int BFSPathBetween(string node1name, string node2name, out List<Node> pathList)
     {
+        var nodes = BFS(GetNodeByName(node1name));
+
         pathList = new List<Node>();
+        int cost = 0;
 
+        var node1 = GetNodeByName(node1name);
+        var node2 = GetNodeByName(node2name);
+        pathList.Add(node2);
 
-        return 0;
+        foreach (Neighbor n in node2.Neighbors)
+        {
+            if (n.Node == nodes[node2].pred) {cost += n.Weight;}
+        }
+        
+        var node = nodes[node2].pred;
+
+        while (node != node1)
+        {
+            pathList.Insert(0, node);
+
+            foreach (Neighbor n in node.Neighbors)
+            {
+                if (n.Node == nodes[node].pred) {cost += n.Weight;}
+            }
+
+            node = nodes[node].pred;
+            
+        }
+        
+        pathList.Insert(0, node);
+
+        return cost;
     }
 
 
