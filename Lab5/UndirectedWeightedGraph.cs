@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Xml;
 
 namespace Lab5;
 
@@ -333,15 +334,64 @@ public class UndirectedWeightedGraph
 
     public Dictionary<Node, (Node pred, int cost)> Dijkstra(Node startingNode)
     {
+        var resultsDictionary = new Dictionary<Node, (Node pred, int dist)>();
         PriorityQueue<Neighbor, int> priorityQueue = new PriorityQueue<Neighbor, int>();
-        var neightbor = new Neighbor(){ Node= new Node(), Weight= 4};
+        resultsDictionary[startingNode] = (null, 0);
 
-        priorityQueue.Enqueue( neightbor, neightbor.Weight + 0);
+        foreach (var i in Nodes)
+        {
+            i.Color = Color.White;
+        }
 
-        HashSet<Node> visited = new HashSet<Node>();    
+        startingNode.Color = Color.Black;
 
+        foreach (Neighbor neighbor in startingNode.Neighbors) 
+        {
+            priorityQueue.Enqueue(neighbor, neighbor.Weight);
+        }
 
-        return null;
+        Node node = startingNode;
+        Neighbor n = priorityQueue.Dequeue();
+        Neighbor prev_n = default;
+        int cost = 0;
+        bool all_visited = true;
+
+        while (priorityQueue.Count > 0 || cost == 0)
+        {
+            all_visited = true;
+
+            if (n.Node.Color != Color.Black)
+            {
+                resultsDictionary[n.Node] = (node, cost + n.Weight);
+                n.Node.Color = Color.Black;
+            }
+
+            foreach (var neighbor in n.Node.Neighbors)
+            {
+                if (neighbor.Node.Color != Color.Black)
+                {
+                    if (neighbor.Node.Color == Color.White) {priorityQueue.Enqueue(neighbor, neighbor.Weight + cost);}
+                    neighbor.Node.Color = Color.Gray;
+                    all_visited = false;
+                }
+            }
+
+            if (all_visited)
+            {
+                n = prev_n;
+                cost = resultsDictionary[n.Node].dist;
+            }
+
+            cost = resultsDictionary[n.Node].dist;
+            node = n.Node;
+            prev_n = n;
+            n = priorityQueue.Dequeue();
+        }
+
+        resultsDictionary[n.Node] = (node, cost + n.Weight);
+        n.Node.Color = Color.Black;
+
+        return resultsDictionary;
     }
 
     /// <summary>
@@ -352,11 +402,40 @@ public class UndirectedWeightedGraph
     /// <param name="node2name">The ending node name</param>
     /// <param name="pathList">A list of the nodes in the path from the starting node to the ending node</param>
     /// <returns>The total cost of the weights in the path</returns>
-    public int DijkstraPathBetween(string node1, string node2, out List<Node> pathList)
+    public int DijkstraPathBetween(string node1name, string node2name, out List<Node> pathList)
     {
-        pathList = new List<Node>();
+        var nodes = Dijkstra(GetNodeByName(node1name));
 
-        return 0;
+        pathList = new List<Node>();
+        int cost = 0;
+
+        var node1 = GetNodeByName(node1name);
+        var node2 = GetNodeByName(node2name);
+        pathList.Add(node2);
+
+        foreach (Neighbor n in node2.Neighbors)
+        {
+            if (n.Node == nodes[node2].pred) {cost += n.Weight;}
+        }
+        
+        var node = nodes[node2].pred;
+
+        while (node != node1)
+        {
+            pathList.Insert(0, node);
+
+            foreach (Neighbor n in node.Neighbors)
+            {
+                if (n.Node == nodes[node].pred) {cost += n.Weight;}
+            }
+
+            node = nodes[node].pred;
+            
+        }
+        
+        pathList.Insert(0, node);
+
+        return cost;
     }
 
 }

@@ -139,5 +139,16 @@ public class UnitTests
         Assert.AreEqual(7, weighted_graph.BFSPathBetween("a", "c", out list));
         Assert.AreEqual(5, weighted_graph.BFSPathBetween("a", "e", out list));
     }
+
+    [TestMethod]
+    public void DijkstraPathBetween()
+    {
+        UndirectedWeightedGraph weighted_graph = new UndirectedWeightedGraph("../../../graphs/graph1-weighted.txt");
+        List<Node> list = new List<Node>();
+
+        Assert.AreEqual(2, weighted_graph.DijkstraPathBetween("a", "b", out list));
+        Assert.AreEqual(7, weighted_graph.DijkstraPathBetween("a", "c", out list));
+        Assert.AreEqual(5, weighted_graph.DijkstraPathBetween("a", "e", out list));
+    }
 }
 
